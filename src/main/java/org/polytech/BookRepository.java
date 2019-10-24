@@ -2,6 +2,8 @@ package org.polytech;
 
 import io.spring.guides.gs_producing_web_service.Book;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpClientErrorException.NotFound;
 
 import javax.annotation.PostConstruct;
 import java.util.*;
@@ -35,7 +37,13 @@ public class BookRepository {
     }
 
     public Book findBook(int id) {
-        return books.get(id);
+
+        final Book book = books.get(id);
+
+        if (book == null) {
+            throw new RuntimeException("Book not found");
+        }
+        return book;
     }
 
     public List<Book> findAll() {
